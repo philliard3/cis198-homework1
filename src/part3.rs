@@ -182,7 +182,7 @@ fn pick_longest_in_v2<'a>(v: Vec<&'a str>) -> &'a str {
     Write three versions of a function that pads a vector with zeros.
     Fail if the vector is larger than the desired length.
 
-    Use .clone() as necessary to make the unit tests compile.
+    Use .clone() if necessary to make any additional unit tests compile.
 
     Which of these functions do you prefer? Which is the most efficient?
 */
