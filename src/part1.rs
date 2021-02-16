@@ -9,8 +9,8 @@
 
 // Remove these once you are done editing the file!
 // This will result in useful warnings if you missed something.
-#![allow(dead_code)]
-#![allow(unused_variables)]
+//#![allow(dead_code)]
+//#![allow(unused_variables)]
 
 /*
     Problem 1: Double
@@ -24,16 +24,16 @@
 */
 
 pub fn double_v1(n: i32) -> i32 {
-    unimplemented!()
+    n * 2
 }
 
 pub fn double_v2(n: &i32) -> i32 {
-    unimplemented!()
+    (*n) * 2
 }
 
 pub fn double_v3(n: &mut i32) {
     // double n in place
-    unimplemented!()
+    *n = (*n)*2;
 }
 
 // Example unit test (so you can recall the syntax)
@@ -42,12 +42,20 @@ fn test_double_v1() {
     assert_eq!(double_v1(2), 4);
     assert_eq!(double_v1(-3), -6);
 }
-// #[test]
-// fn test_double_v2() {
-// }
-// #[test]
-// fn test_double_v3() {
-// }
+#[test]
+fn test_double_v2() {
+    assert_eq!(double_v2(&2), 4);
+    assert_eq!(double_v2(&-3), -6);
+}
+#[test]
+fn test_double_v3() {
+    let mut n1 = 2;
+    double_v3(&mut n1);
+    assert_eq!(n1, 4);
+    let mut n2 = -3;
+    double_v3(&mut n2);
+    assert_eq!(n2, -6);
+}
 
 /*
     Problem 2: Integer square root
@@ -57,7 +65,27 @@ fn test_double_v1() {
     efficiently than trying every possibility.
 */
 pub fn sqrt(n: usize) -> usize {
-    unimplemented!()
+    if n==0 { return 0 }
+    let highest_possible = n/2;
+    let mut current_best = 0;
+    for i in 1..=highest_possible {
+        if i*i <= n {
+            current_best = i;
+        } else {
+            break;
+        }
+    }
+    current_best
+}
+
+
+#[test]
+fn test_sqrt() {
+    assert!(sqrt(4) == 2);
+    assert!(sqrt(3) == 1);
+    assert!(sqrt(9) == 3);
+    assert!(sqrt(24) == 4);
+    assert!(sqrt(26) == 5);
 }
 
 // Remember to write unit tests here (and on all future functions)
@@ -75,18 +103,20 @@ pub fn sqrt(n: usize) -> usize {
 */
 pub fn sum_v1(slice: &[i32]) -> i32 {
     // do some initialization...
+    let mut sum = 0;
     for &v in slice {
-        // ...
+        sum += v;
     }
-    unimplemented!()
+    sum
 }
 
 pub fn sum_v2(slice: &[i32]) -> i32 {
     // do some initialization...
+    let mut sum = 0;
     for v in slice {
-        // ...
+        sum += *v;
     }
-    unimplemented!()
+    sum
 }
 
 /*
@@ -98,7 +128,21 @@ pub fn sum_v2(slice: &[i32]) -> i32 {
 */
 
 pub fn unique(slice: &[i32]) -> Vec<i32> {
-    unimplemented!()
+    let mut new_vec = vec!();
+    for value in slice {
+        let mut seen = false;
+        for old_value in &new_vec {
+            if old_value == value {
+                seen = true;
+                break;
+            }
+        }
+        if seen {
+            continue;
+        }
+        new_vec.push(*value)
+    }
+    new_vec
 }
 
 /*
@@ -109,7 +153,13 @@ pub fn unique(slice: &[i32]) -> Vec<i32> {
     to know is that pred is a function from i32 to bool.
 */
 pub fn filter(slice: &[i32], pred: impl Fn(i32) -> bool) -> Vec<i32> {
-    unimplemented!()
+    let mut new_vec = vec!();
+    for &value in slice {
+        if pred(value) {
+            new_vec.push(value)
+        }
+    }
+    new_vec
 }
 
 #[test]
@@ -128,7 +178,17 @@ fn test_filter() {
     where v[i] is the ith fibonacci number.
 */
 pub fn fibonacci(n1: i32, n2: i32, out_size: usize) -> Vec<i32> {
-    unimplemented!()
+    let mut new_vec = vec![n1, n2];
+    let mut one_before = n2;
+    let mut two_before = n1;
+    let mut current;
+    for _i in 1..=out_size-2{
+        current = one_before+two_before;
+        new_vec.push(current);
+        two_before = one_before;
+        one_before = current;
+    }
+    new_vec
 }
 
 /*
@@ -142,11 +202,14 @@ pub fn fibonacci(n1: i32, n2: i32, out_size: usize) -> Vec<i32> {
     What are some reasons the second function is not efficient?
 */
 pub fn str_concat(s1: &str, s2: &str) -> String {
-    unimplemented!()
+    let mut b = String::new();
+    b += s1;
+    b += s2;
+    b
 }
 
 pub fn string_concat(s1: String, s2: String) -> String {
-    unimplemented!()
+    s1 + &s2
 }
 
 /*
@@ -157,7 +220,11 @@ pub fn string_concat(s1: String, s2: String) -> String {
 */
 
 pub fn concat_all(v: Vec<String>) -> String {
-    unimplemented!()
+    let mut b = String::new();
+    for s in v {
+        b += &s;
+    }
+    b
 }
 
 /*
@@ -175,11 +242,19 @@ pub fn concat_all(v: Vec<String>) -> String {
 */
 
 pub fn parse_all(v: Vec<String>) -> Vec<i32> {
-    unimplemented!()
+    let mut new_vec = vec![]; 
+    for val in v {
+        new_vec.push(val.parse().expect("Didn't parse the string correctly"));
+    }
+    new_vec
 }
 
 pub fn print_all(v: Vec<i32>) -> Vec<String> {
-    unimplemented!()
+    let mut new_vec = vec![]; 
+    for val in v {
+        new_vec.push(format!("{}", val));
+    }
+    new_vec
 }
 
 #[test]
@@ -206,7 +281,9 @@ fn test_parse_print() {
 */
 
 pub fn concat_even_fibonaccis(n: usize) -> String {
-    unimplemented!()
+    let fib_nums = fibonacci(1, 1, n);
+    let is_even = |i| i%2 == 0;
+    concat_all(print_all(filter(&fib_nums, is_even)))
 }
 
 #[test]
