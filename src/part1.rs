@@ -19,8 +19,10 @@
 
     What are some differences between them? Can you write unit tests
     which fail (or fail to compile) for some but not others?
+    References require derefs in order to use and rewrite their values, otherwise it's a type error.
 
     Which of the three do you prefer?
+    I prefer the in-place unless I need a new value.
 */
 
 pub fn double_v1(n: i32) -> i32 {
@@ -100,6 +102,7 @@ fn test_sqrt() {
     Clippy should detect if you mess this up.
 
     Which of the two ways do you prefer?
+    I prefer the first so I don't have to do a deref inside the loop.
 */
 pub fn sum_v1(slice: &[i32]) -> i32 {
     // do some initialization...
@@ -200,6 +203,7 @@ pub fn fibonacci(n1: i32, n2: i32, out_size: usize) -> Vec<i32> {
     You may use any standard library function you wish.
 
     What are some reasons the second function is not efficient?
+    It requires two different Strings, which need space in memory to grow, and then makes a whole new String. The first function just makes the one String and is also more general.
 */
 pub fn str_concat(s1: &str, s2: &str) -> String {
     let mut b = String::new();
